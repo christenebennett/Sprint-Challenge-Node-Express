@@ -63,18 +63,18 @@ router.put('/:id', async (req, res) => {
   const {id} = req.params;
   try {
     const updatedAction = req.body;
-    const action = await Actions.update(id, req.body);
+    const action = await Actions.update(id, updatedAction);
     if (action){
       if (updatedAction.project_id && updatedAction.description && updatedAction.notes) {
         res.status(200).json({updatedAction: action});
       } else {
-        res.status(400).json({err: "Please provide updated name and description for action"});
+        res.status(400).json({err: "Please provide updated project ID, description, and notes for action"});
       }
     } else {
       res.status(404).json({message: "The action with the specified ID does not exist."});
     }
   } catch (err) {
-    res.status(500).json({err: "Project failed to udpate."})
+    res.status(500).json({err: "Action failed to udpate."})
   }
 })
 

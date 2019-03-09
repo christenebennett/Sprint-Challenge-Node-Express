@@ -27,6 +27,21 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// GET project's actions
+router.get('/:id/actions', async (req, res) => {
+  try {
+    const {id} = req.params;
+    const projActions = await Projects.getProjectActions(id);  
+    if (projActions > 0) {
+      res.status(200).json(projActions);
+    } else {
+      res.status(404).json({err: "The project associated with the specified ID does not exist."})
+    }
+  } catch (error) {
+    res.status(500).json({err: "There was an error retrieving the project's actions."})
+  }
+})
+
 // POST, or add, new project
 router.post('/', async (req, res) => {
   try {
