@@ -77,10 +77,10 @@ router.put('/:id', async (req, res) => {
   const {id} = req.params;
   try {
     const updatedProj = req.body;
-    const project = await Projects.update(id, req.body);
+    const project = await Projects.update(id, updatedProj);
     if (project){
       if (updatedProj.name && updatedProj.description) {
-        res.status(200).json({updatedProject: project});
+        res.status(200).json({project});
       } else {
         res.status(400).json({err: "Please provide updated name and description for project"});
       }
