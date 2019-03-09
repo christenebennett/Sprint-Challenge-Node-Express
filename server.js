@@ -3,7 +3,7 @@ const logger = require('morgan');
 const helmet = require('helmet');
 
 const ProjectsRouter = require('./projects/projectsRouter');
-// const ActionsRouter = require('./actions/actionsRouter');
+const ActionsRouter = require('./actions/actionsRouter');
 
 const server = express();
 const parser = express.json();
@@ -12,7 +12,7 @@ const loggerMiddleware = logger('dev');
 
 server.use(parser, securtiyMiddleware, loggerMiddleware);
 server.use('/api/projects', ProjectsRouter);
-// server.use('/api/actions', ActionsRouter);
+server.use('/api/actions', ActionsRouter);
 
 server.get('/', (req, res) => {
   res.send(`
