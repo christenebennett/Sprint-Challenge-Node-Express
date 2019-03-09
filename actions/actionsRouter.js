@@ -49,30 +49,16 @@ router.delete('/:id', async (req, res) => {
   const {id} = req.params;
   try {
     const actionDelete = await Actions.remove(id);
-    res.status(200).json({deletedMessage: actionDelete});
+    if (actionDelete){
+      res.status(200).json({deletedMessage: actionDelete});
+    } else {
+      res.status(404).json({message: "The action with the specified ID does not exist."})
+    }
   } catch (err) {
     res.status(500).json({err: 'The action failed to delete.'});
   }
 })
 
-//UPDATE, or edit, the action name and/or description
-router.put('/:id', async (req, res) => {
-  const {id} = req.params;
-  try {
-    const updatedProj = req.body;
-    const action = await Actions.update(id, req.body);
-    if (action){
-      if (updatedProj.name && updatedProj.description) {
-        res.status(200).json({updatedProject: action});
-      } else {
-        res.status(400).json({err: "Please provide updated name and description for action"});
-      }
-    } else {
-      res.status(404).json({message: "The action with the specified ID does not exist."});
-    }
-  } catch (err) {
-    res.status(500).json({err: "Project failed to udpate."})
-  }
-})
+
 
 module.exports = router;
