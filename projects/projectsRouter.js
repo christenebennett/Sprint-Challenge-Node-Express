@@ -2,7 +2,6 @@ const express = require('express');
 const Projects = require('../data/helpers/projectModel');
 const router = express.Router();
 
-
 // GET all projects
 router.get('/', async (req, res) => {
   try {
@@ -48,7 +47,11 @@ router.delete('/:id', async (req, res) => {
   const {id} = req.params;
   try {
     const projectDelete = await Projects.remove(id);
-    res.status(200).json({deletedMessage: projectDelete});
+    if (projectDelete) {
+      res.status(200).json({deletedMessage: projectDelete});
+    } else {
+      res.status(404).json({err: 'The project associated with the specified ID was not found.'})
+    }
   } catch (err) {
     res.status(500).json({err: 'The project failed to delete.'});
   }

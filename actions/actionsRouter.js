@@ -3,7 +3,6 @@ const Actions = require('../data/helpers/actionModel');
 
 const router = express.Router();
 
-
 // GET all actions
 router.get('/', async (req, res) => {
   try {
