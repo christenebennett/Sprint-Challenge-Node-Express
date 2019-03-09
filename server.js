@@ -8,7 +8,7 @@ const ProjectsRouter = require('./projects/projectsRouter');
 const server = express();
 const parser = express.json();
 const securtiyMiddleware = helmet();
-const loggerMiddleware = logger();
+const loggerMiddleware = logger('dev');
 
 server.use(parser, securtiyMiddleware, loggerMiddleware);
 server.use('/api/projects', ProjectsRouter);

@@ -13,6 +13,17 @@ router.get('/', async (req, res) => {
   }
 })
 
+// GET project by id
+router.get('/:id', async (req, res) => {
+  const {id} = req.params;
+  try {
+    const project = await Projects.get(id);
+    res.status(201).json(project);
+  } catch (err) {
+    res.status(500).json({err: 'The project could not be retrieved.'})
+  }
+})
+
 // POST, or add, new project
 router.post('/', async (req, res) => {
   try {
@@ -23,11 +34,11 @@ router.post('/', async (req, res) => {
     } else {
       res.status(400).json({message: 'Please provide name and description of new project.'})
     }
-    
   } catch (err) {
     res.status(500).json({err: 'There was a problem adding new project.'});
   }
 })
+
 
 
 
