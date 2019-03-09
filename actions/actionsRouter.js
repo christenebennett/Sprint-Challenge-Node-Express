@@ -29,6 +29,50 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// POST, or add, new action
+router.post('/', async (req, res) => {
+  try {
+    const newAction = req.body;
+    if (newAction.project_id && newAction.description && newAction.notes) {
+      const action = await Actions.insert(newAction);
+      res.status(201).json({newAction: action});
+    } else {
+      res.status(400).json({message: 'Please provide project ID, description, and notes.'})
+    }
+  } catch (err) {
+    res.status(500).json({err: 'There was a problem adding new action.'});
+  }
+})
 
+// DELETE action
+router.delete('/:id', async (req, res) => {
+  const {id} = req.params;
+  try {
+    const actionDelete = await Actions.remove(id);
+    res.status(200).json({deletedMessage: actionDelete});
+  } catch (err) {
+    res.status(500).json({err: 'The action failed to delete.'});
+  }
+})
+
+//UPDATE, or edit, the action name and/or description
+router.put('/:id', async (req, res) => {
+  const {id} = req.params;
+  try {
+    const updatedProj = req.body;
+    const action = await Actions.update(id, req.body);
+    if (action){
+      if (updatedProj.name && updatedProj.description) {
+        res.status(200).json({updatedProject: action});
+      } else {
+        res.status(400).json({err: "Please provide updated name and description for action"});
+      }
+    } else {
+      res.status(404).json({message: "The action with the specified ID does not exist."});
+    }
+  } catch (err) {
+    res.status(500).json({err: "Project failed to udpate."})
+  }
+})
 
 module.exports = router;
