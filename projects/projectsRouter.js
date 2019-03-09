@@ -15,10 +15,14 @@ router.get('/', async (req, res) => {
 
 // GET project by id
 router.get('/:id', async (req, res) => {
-  const {id} = req.params;
   try {
+    const {id} = req.params;
     const project = await Projects.get(id);
-    res.status(201).json(project);
+    if (project) {
+      res.status(201).json(project);
+    } else {
+      res.status(404).json({error: 'The project with that id does not exist.'});
+    }
   } catch (err) {
     res.status(500).json({err: 'The project could not be retrieved.'})
   }
@@ -39,6 +43,36 @@ router.post('/', async (req, res) => {
   }
 })
 
+// DELETE project
+router.delete('/:id', async (req, res) => {
+  const {id} = req.params;
+  try {
+    const projectDelete = await Projects.remove(id);
+    res.status(200).json({deletedMessage: projectDelete});
+  } catch (err) {
+    res.status(500).json({err: 'The project failed to delete.'});
+  }
+})
+
+//UPDATE, or edit, the project name and/or description
+router.put('/:id', async (req, res) => {
+  const {id} = req.params;
+  try {
+    const updatedProj = req.body;
+    const project = await Projects.update(id, req.body);
+    if (project){
+      if (updatedProj.name && updatedProj.description) {
+        res.status(200).json({updatedProject: project});
+      } else {
+        res.status(400).json({err: "Please provide updated name and description for project"});
+      }
+    } else {
+      res.status(404).json({message: "The project with the specified ID does not exist."});
+    }
+  } catch (err) {
+    res.status(500).json({err: "Project failed to udpate."})
+  }
+})
 
 
 
